@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Java test regex</title>
+</head>
+<script type="application/javascript">
+	const groups = function(list) {
+		this.num = 0;
+		this.size = () => list.length;
+		this.inc = () => ++this.num;
+		this.dec = () => --this.num;
+		this.get = () => list[this.num]; 
+		this.isEmpty = list === undefined || list === null || this.size() === 0;
+	};
+	let send = () => {
+		console.log('Not init yet!');
+	};
+	let incGroup = () => {
+		console.log('Not init yet!');
+	};
+	let decGroup = () => {
+		console.log('Not init yet!');
+	};
+</script>
+<style type="text/css">
+	body {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+	.root-navblock {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+	.navblock {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+	.field {
+		border: 1px solid black;
+		width: 40rem;
+		margin: .3rem;
+		padding: .3rem;
+		border-radius: .3rem ;
+	}
+	.big {
+		border-bottom-right-radius: 0;
+		resize: vertical;
+	}
+	.squeezed {
+		width: 38rem;
+	}
+	.button {
+		border-width: 2px;
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.delim {
+		border-width: 1px;	
+		width: 45rem;
+	}
+	.block {
+		padding: 1rem;
+		width: 10rem;
+		margin: .1rem;
+		text-align: center;
+	}
+	.wait {
+		background-color: silver;
+	}
+	.all-match {
+		background-color: #4c8046;
+	}
+	.not-all-match {
+		background-color: #ff564f;
+	}
+</style>
+<body>
+
+<input class="field" type="text" autofocus required id="regex" placeholder="Regex" />
+<textarea class="big field" rows="10" required id="template" placeholder="Template"></textarea>
+<input class="field button" type="button" value="Submit" onclick="send()" />
+<hr class="delim" />
+<div class="block wait" id="match-block">Waiting data</div>
+<div id="error" class="block not-all-match"></div>
+<div id="result-block" class="root-navblock">
+	<textarea class="big squeezed field" rows="10" readonly id="result"></textarea>
+	<div class="navblock">
+		<input type="button" value="-" onclick="decGroup()" />
+		<label id="group-counter">0</label>
+		<input type="button" value="+" onclick="incGroup()" />
+	</div>
+</div>
+
+<script type="application/javascript">
+	let listGroups = new groups([]);
+
+	const regexInput = document.querySelector("#regex");
+	const getRegex = () => regexInput.value;
+	
+	const templateInput = document.querySelector("#template");
+	const getTemplate = () => templateInput.value;
+
+	const isAllMatchBlock = document.querySelector("#match-block");
+
+	const errorBlock = document.querySelector("#error");
+	errorBlock.style.display = "none";
+	
+	const resultBlock = document.querySelector("#result-block");
+	resultBlock.style.display = "none";
+	
+	const resultInput = document.querySelector("#result");
+
+	const label = document.querySelector("#group-counter");
+
+	send = () => {
+		isAllMatchBlock.classList.remove("not-all-match");
+		isAllMatchBlock.classList.remove("all-match");
+		isAllMatchBlock.classList.add("wait");
+		isAllMatchBlock.innerHTML = 'Waiting data';
+		fetch("/parse", {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				regex: getRegex(),
+				template: getTemplate()
+			})
+		}).then(e => e.json()).then(it => {
+			isAllMatchBlock.classList.remove("wait");
+			if (it.allMatched) {
+				isAllMatchBlock.classList.remove("not-all-match");
+				isAllMatchBlock.classList.add("all-match");
+				isAllMatchBlock.innerHTML = "All match";
+			} else {
+				isAllMatchBlock.classList.remove("all-match");
+				isAllMatchBlock.classList.add("not-all-match");
+				isAllMatchBlock.innerHTML = "Not all match";
+			}
+			if (it.error) {
+				if (errorBlock.style.display === 'none')
+					errorBlock.style.display = 'block';
+				errorBlock.innerHTML = it.error;
+			} else if (errorBlock.style.display !== 'none')
+				errorBlock.style.display = 'none';
+			if (it.result) {
+				resultInput.style.display = "block";
+				resultInput.value = it.result; 
+			} else {
+				resultInput.style.display = "none";
+			}
+			listGroups = new groups(it.result);
+			if (listGroups.isEmpty) {
+				resultBlock.style.display = "none";
+			} else {
+				resultBlock.style.display = "flex";
+				resultInput.value = listGroups.get();
+				label.innerHTML = listGroups.num;
+			}
+		});
+	};
+	incGroup = () => {
+		if (listGroups.isEmpty || listGroups.num === listGroups.size() - 1) return;
+		listGroups.inc();
+		resultInput.value = listGroups.get();
+		label.innerHTML = listGroups.num;
+	};
+	decGroup = () => {
+		if (listGroups.isEmpty || listGroups.num === 0) return;
+		listGroups.dec();
+		resultInput.value = listGroups.get();
+		label.innerHTML = listGroups.num;
+	}
+</script>
+</body>
+</html>
