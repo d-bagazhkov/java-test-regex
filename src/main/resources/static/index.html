@@ -1,24 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <title>Java test regex</title>
+	<title>Apps</title>
+	<script type="application/javascript" src="main.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="style.css" />
+<!--	<script type="application/javascript" src="codemirror/lib/codemirror.js" defer></script>-->
 </head>
-<script type="application/javascript" src="main.js" defer></script>
-<link rel="stylesheet" href="style.css">
 <body>
-	<input class="field" type="text" autofocus required id="regex" placeholder="Regex"/>
-	<textarea class="big field" rows="10" required id="template" placeholder="Template"></textarea>
-	<input class="field button" type="button" value="Submit" id="send-button"/>
-	<hr class="delim"/>
-	<div class="block wait" id="match-block">Waiting data</div>
-	<div id="error" class="block not-all-match"></div>
-	<div id="result-block" class="root-navblock">
-		<textarea class="big squeezed field" rows="10" readonly id="result"></textarea>
-		<div class="navblock">
-			<input type="button" value="-" id="dec-button"/>
-			<label id="group-counter">0</label>
-			<input type="button" value="+" id="inc-button"/>
+<nav id="nav" class="nav">
+	<a data-href="regex-page" class="abutton">REGEX</a>
+	<a data-href="jinja-page" class="abutton">JINJA</a>
+</nav>
+<div id="root">
+	<div class="regex-page column-page">
+		<textarea id="regex-page-regex-input" class="field field-size-max" placeholder="Regex" rows="1" autofocus required></textarea>
+		<textarea id="regex-page-template-input" class="field field-size-max" placeholder="Input template" rows="10" required></textarea>
+		<a id="regex-page-send" class="field abutton field-size-max">Submit</a>
+		<hr class="delim" />
+		<div id="regex-page-info-block" class="info block">Nothing:)</div>
+		<div id="regex-page-result-block" class="result">
+			<textarea class="big squeezed field field-size-max" rows="10" readonly id="regex-page-result"></textarea>
+			<div class="navblock">
+				<input type="button" value="-" id="regex-page-dec-button"/>
+				<label id="regex-page-group-counter">0</label>
+				<input type="button" value="+" id="regex-page-inc-button"/>
+			</div>
 		</div>
 	</div>
+	<div class="jinja-page column-page">
+		<textarea id="jinja-page-template-input" class="field field-size-max" placeholder="Input template" rows="10" required></textarea>
+		<div id="jinja-page-context-block" class="context-block">
+			<div class="context-elem" data-id="1">
+				<input placeholder="Key" class="key field" />
+				<label>isArray</label>
+				<input type="checkbox" class="is-array" />
+				<textarea class="value field" placeholder="Value" rows="1"></textarea>
+				<a class="action-button abutton" data-action-button>+</a>
+			</div>
+		</div>
+		<a id="jinja-page-send" class="field abutton field-size-max">Submit</a>
+		<textarea class="field field-size-max" id="jinja-page-result" rows="10" readonly></textarea>
+	</div>
+</div>
+<div></div>
 </body>
 </html>

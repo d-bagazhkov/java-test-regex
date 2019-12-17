@@ -1,9 +1,11 @@
-body {
+
+
+.column-page {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 }
-.root-navblock {
+.result {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -15,19 +17,19 @@ body {
 	align-items: center;
 	justify-content: center;
 }
+.field-size-max {
+	width: 40rem;
+}
 .field {
 	border: 1px solid black;
-	width: 40rem;
 	margin: .3rem;
 	padding: .3rem;
-	border-radius: .3rem ;
-}
-.big {
+	border-radius: .3rem;
 	border-bottom-right-radius: 0;
 	resize: vertical;
 }
 .squeezed {
-	width: 38rem;
+	width: 37rem;
 }
 .button {
 	border-width: 2px;
@@ -35,7 +37,7 @@ body {
 	margin-right: 0;
 }
 .delim {
-	border-width: 1px;	
+	border-width: 1px;
 	width: 45rem;
 }
 .block {
@@ -47,9 +49,43 @@ body {
 .wait {
 	background-color: silver;
 }
-.all-match {
+.done {
 	background-color: #4c8046;
 }
-.not-all-match {
+.fail {
 	background-color: #ff564f;
+}
+.abutton {
+	text-align: center;
+	cursor: pointer;
+	font-size: 1.1rem;
+}
+.context-block {
+	display: flex;
+	flex-direction: column;
+}
+.context-elem {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+.context-elem .key {
+
+}
+.context-elem .is-array {
+
+}
+.context-elem .value {
+	width: 23.5rem;
+}
+nav.nav{
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+}
+body {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
